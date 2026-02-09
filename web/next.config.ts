@@ -1,12 +1,18 @@
 import type { NextConfig } from "next";
+import path from "path";
 
 const nextConfig: NextConfig = {
-  // This tells Next.js to allow and compile imports from the parent directory
   experimental: {
     externalDir: true,
   },
-  // If there are specific packages we need to transpile, we can add them here
-  transpilePackages: ["@core"],
+  // This explicitly tells Next.js where to find the source files
+  webpack: (config) => {
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      "@core": path.resolve(__dirname, "../src"),
+    };
+    return config;
+  },
 };
 
 export default nextConfig;
