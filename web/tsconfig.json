@@ -27,7 +27,7 @@
         "./src/*"
       ],
       "@core/*": [
-        "../src/*"
+        "./src-core/*"
       ]
     }
   },
@@ -38,7 +38,7 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
     "**/*.mts",
-    "../src"
+    "src-core"
   ],
   "exclude": [
     "node_modules"
