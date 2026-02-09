@@ -60,7 +60,7 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
                     action={async (formData) => {
                         "use server"
                         try {
-                            await signIn("credentials", formData, { redirectTo: '/' })
+                            await signIn("credentials", formData)
                         } catch (error) {
                             if ((error as Error).message.includes('NEXT_REDIRECT')) {
                                 throw error;
