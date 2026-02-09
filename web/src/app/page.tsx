@@ -30,8 +30,19 @@ export default async function Dashboard() {
             <span style={{ fontSize: '1.5rem', fontWeight: '800', letterSpacing: '-0.025em', background: 'linear-gradient(to right, #fff, #94a3b8)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>NAVERA</span>
           </div>
           <div style={{ display: 'flex', gap: '2rem', alignItems: 'center' }}>
-            <a href="/login" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '0.9rem', fontWeight: '500' }}>Sign In</a>
-            <a href="/register" className="btn btn-primary" style={{ padding: '0.6rem 1.2rem', fontSize: '0.9rem', textDecoration: 'none' }}>Start Free Trial</a>
+            {session ? (
+              <form action={async () => {
+                'use server'
+                await signOut()
+              }}>
+                <button type="submit" className="btn btn-primary" style={{ padding: '0.6rem 1.2rem', fontSize: '0.9rem' }}>Sign Out</button>
+              </form>
+            ) : (
+              <>
+                <a href="/login" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '0.9rem', fontWeight: '500' }}>Sign In</a>
+                <a href="/register" className="btn btn-primary" style={{ padding: '0.6rem 1.2rem', fontSize: '0.9rem', textDecoration: 'none' }}>Start Free Trial</a>
+              </>
+            )}
           </div>
         </nav>
 
@@ -53,7 +64,7 @@ export default async function Dashboard() {
           </div>
 
           <div style={{ marginTop: '6rem', position: 'relative' }}>
-            <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '80%', height: '80%', background: 'radial-gradient(circle, rgba(56, 189, 248, 0.15) 0%, transparent 70%)', filter: 'blur(60px)', zIndex: 0 }}></div>
+            <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '80%', height: '80%', background: 'radial-gradient(circle, rgba(56, 189, 248, 0.15) 0%, transparent 70%)', filter: 'blur(60px)', zIndex: 0, pointerEvents: 'none' }}></div>
             <div className="card" style={{ position: 'relative', zIndex: 1, padding: '1rem', background: 'rgba(15, 23, 42, 0.5)', border: '1px solid rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)' }}>
               <div style={{ height: '400px', background: 'linear-gradient(135deg, #0f172a, #1e293b)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <div style={{ textAlign: 'center' }}>
