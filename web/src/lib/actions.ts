@@ -1,7 +1,7 @@
 'use server'
 
-import { AccountingRepo, PostEntryParams } from "../../../src/repo";
-import { Account } from "../../../src/types";
+import { AccountingRepo, PostEntryParams } from "@core/repo";
+import { Account } from "@core/types";
 import { revalidatePath, unstable_noStore as noStore } from "next/cache";
 import { auth, signIn } from "@/auth";
 import { redirect } from "next/navigation";
