@@ -7,12 +7,12 @@ const { Pool } = pg;
 
 const connectionString = process.env.DATABASE_URL;
 
-if (!connectionString) {
-    throw new Error("DATABASE_URL is not set");
+if (!connectionString && process.env.NODE_ENV === 'production') {
+    console.warn("⚠️ DATABASE_URL is missing. Build will continue but database features will fail at runtime.");
 }
 
 export const pool = new Pool({
-    connectionString,
+    connectionString: connectionString || "postgres://localhost:5432/placeholder",
 });
 
 export const db = drizzle(pool, { schema });
