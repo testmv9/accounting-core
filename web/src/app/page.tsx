@@ -15,32 +15,34 @@ export default async function Dashboard() {
       <div style={{ minHeight: '100vh', background: '#020617', color: '#f8fafc', fontFamily: 'Inter, system-ui, sans-serif' }}>
         {/* Navigation */}
         <nav style={{
-          padding: '1.5rem 2rem',
+          padding: '1rem 1.5rem',
           display: 'flex',
+          flexWrap: 'wrap',
           justifyContent: 'space-between',
           alignItems: 'center',
+          gap: '1rem',
           borderBottom: '1px solid rgba(255,255,255,0.05)',
           position: 'relative',
           zIndex: 100
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-            <div style={{ padding: '0.4rem', background: 'linear-gradient(135deg, #38bdf8, #818cf8)', borderRadius: '8px' }}>
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" /></svg>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+            <div style={{ padding: '0.35rem', background: 'linear-gradient(135deg, #38bdf8, #818cf8)', borderRadius: '8px', display: 'flex' }}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" /></svg>
             </div>
-            <span style={{ fontSize: '1.5rem', fontWeight: '800', letterSpacing: '-0.025em', background: 'linear-gradient(to right, #fff, #94a3b8)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>NAVERA</span>
+            <span style={{ fontSize: '1.25rem', fontWeight: '800', letterSpacing: '-0.025em', background: 'linear-gradient(to right, #fff, #94a3b8)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>NAVERA</span>
           </div>
-          <div style={{ display: 'flex', gap: '2rem', alignItems: 'center' }}>
+          <div style={{ display: 'flex', gap: '1.25rem', alignItems: 'center' }}>
             {session ? (
               <form action={async () => {
                 'use server'
                 await signOut()
               }}>
-                <button type="submit" className="btn btn-primary" style={{ padding: '0.6rem 1.2rem', fontSize: '0.9rem' }}>Sign Out</button>
+                <button type="submit" className="btn btn-secondary" style={{ padding: '0.5rem 1rem', fontSize: '0.85rem' }}>Sign Out</button>
               </form>
             ) : (
               <>
-                <a href="/login" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '0.9rem', fontWeight: '500' }}>Sign In</a>
-                <a href="/register" className="btn btn-primary" style={{ padding: '0.6rem 1.2rem', fontSize: '0.9rem', textDecoration: 'none' }}>Start Free Trial</a>
+                <a href="/login" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '0.85rem', fontWeight: '500' }}>Sign In</a>
+                <a href="/register" className="btn btn-primary" style={{ padding: '0.5rem 1rem', fontSize: '0.85rem', textDecoration: 'none' }}>Start Trial</a>
               </>
             )}
           </div>
