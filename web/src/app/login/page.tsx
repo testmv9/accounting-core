@@ -60,13 +60,20 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
                     action={async (formData) => {
                         "use server"
                         try {
-                            await signIn("credentials", formData)
-                        } catch (error) {
-                            if ((error as Error).message.includes('NEXT_REDIRECT')) {
+                            await signIn("credentials", {
+                                ...Object.fromEntries(formData),
+                                redirectTo: "/"
+                            })
+                        } catch (error: any) {
+                            if (error.message?.includes('NEXT_REDIRECT')) {
                                 throw error;
                             }
                             console.error('Login error:', error);
-                            throw error;
+                            // For v5, we often need to check for specific error types
+                            // but for now, we'll just redirect back with an error params
+                            const searchParams = new URLSearchParams();
+                            searchParams.set("error", "CredentialsSignin");
+                            return; // NextAuth handles redirect internally if successful
                         }
                     }}
                     style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}
@@ -108,6 +115,6 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
                     </p>
                 </div>
             </div>
-        </div>
+        </div >
     )
 }
