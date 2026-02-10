@@ -115,6 +115,6 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
                     </p>
                 </div>
             </div>
-        </div >
+        </div>
     )
 }
