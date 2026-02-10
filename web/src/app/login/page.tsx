@@ -1,8 +1,8 @@
 import { signIn } from "@/auth"
 import Link from "next/link"
 
-export default async function LoginPage({ searchParams }: { searchParams: Promise<{ registered?: string }> }) {
-    const { registered } = await searchParams;
+export default async function LoginPage({ searchParams }: { searchParams: Promise<{ registered?: string, error?: string }> }) {
+    const { registered, error } = await searchParams;
 
     return (
         <div style={{
@@ -35,6 +35,24 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
                 </div>
             )}
             <div style={{ position: 'absolute', width: '200px', height: '200px', background: 'rgba(129, 140, 248, 0.1)', filter: 'blur(80px)', bottom: '20%', right: '15%', borderRadius: '50%' }}></div>
+
+            {error && (
+                <div style={{
+                    maxWidth: '420px',
+                    width: '100%',
+                    padding: '1rem',
+                    background: 'rgba(239, 68, 68, 0.1)',
+                    border: '1px solid rgba(239, 68, 68, 0.2)',
+                    borderRadius: '12px',
+                    color: '#f87171',
+                    marginBottom: '1rem',
+                    textAlign: 'center',
+                    fontSize: '0.9rem',
+                    fontWeight: '600'
+                }}>
+                    ❌ {error === 'CredentialsSignin' ? 'Invalid email or password' : 'Authentication failed. Please try again.'}
+                </div>
+            )}
 
             <div className="card" style={{
                 width: '100%',
@@ -69,11 +87,14 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
                                 throw error;
                             }
                             console.error('Login error:', error);
-                            // For v5, we often need to check for specific error types
-                            // but for now, we'll just redirect back with an error params
+                            // Explicitly redirect back to login with error param
+                            const url = new URL('/login', 'http://localhost:3000'); // Base doesn't matter for redirection in Server Actions
                             const searchParams = new URLSearchParams();
                             searchParams.set("error", "CredentialsSignin");
-                            return; // NextAuth handles redirect internally if successful
+
+                            // In Next.js 15, we should use the redirect helper
+                            const { redirect } = await import('next/navigation');
+                            redirect(`/login?error=CredentialsSignin`);
                         }
                     }}
                     style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}
