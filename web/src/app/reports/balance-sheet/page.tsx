@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { getBalanceSheetData } from "../../../lib/actions";
 import { auth } from "@/auth";
-import { HeaderWrapper } from "../../../components/brand";
 
 export default async function BalanceSheetPage({ searchParams }: { searchParams: Promise<{ date?: string }> }) {
     const { date } = await searchParams;
@@ -14,127 +13,117 @@ export default async function BalanceSheetPage({ searchParams }: { searchParams:
     }
 
     const report = await getBalanceSheetData(tenantId, asOfDate);
-
     const formatMoney = (cents: number) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(cents / 100);
 
     return (
-        <main style={{ maxWidth: '1200px', margin: '0 auto', paddingBottom: '4rem' }}>
-            <HeaderWrapper>
-                <div style={{ display: 'flex', gap: '1rem' }}>
-                    <Link href="/reports/pnl" className="btn btn-secondary" style={{ textDecoration: 'none', padding: '0.5rem 1rem', fontSize: '0.8rem' }}>
-                        P&L
-                    </Link>
-                    <Link href="/reports/aged-receivables" className="btn btn-secondary" style={{ textDecoration: 'none', padding: '0.5rem 1rem', fontSize: '0.8rem' }}>
-                        Receivables
-                    </Link>
+        <div style={{ animation: 'fadeIn 0.5s ease-out' }}>
+            <div className="page-header">
+                <div>
+                    <h1 className="page-title">Balance Sheet</h1>
+                    <p style={{ color: 'var(--muted)', marginTop: '0.25rem' }}>Snapshot of financial position as of {asOfDate}</p>
                 </div>
-            </HeaderWrapper>
-
-            <div style={{ padding: '2rem' }}>
-                <Link href="/" style={{ color: '#38bdf8', textDecoration: 'none', fontSize: '0.9rem' }}>
-                    ← Dashboard
-                </Link>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginTop: '1rem' }}>
-                    <h1 style={{ fontSize: '2.5rem', fontWeight: 'bold', margin: 0, background: 'linear-gradient(to right, #fff, #94a3b8)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-                        Balance Sheet
-                    </h1>
+                <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
                     <form style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-                        <label style={{ fontSize: '0.9rem', color: '#94a3b8' }}>As Of:</label>
                         <input
                             type="date"
                             name="date"
                             defaultValue={asOfDate}
-                            className="input"
-                            style={{ padding: '0.3rem', fontSize: '0.8rem', width: 'auto' }}
+                            className="input-premium"
+                            style={{ padding: '0.5rem 0.75rem', fontSize: '0.85rem', width: 'auto' }}
                         />
-                        <button className="btn btn-secondary" style={{ padding: '0.3rem 0.8rem', fontSize: '0.8rem' }}>Update</button>
+                        <button className="btn-secondary-premium" style={{ padding: '0.5rem 1rem' }}>Update</button>
                     </form>
+                    <div style={{ width: '1px', height: '24px', background: 'var(--glass-border)', margin: '0 0.5rem' }} />
+                    <Link href="/reports/pnl" className="btn-secondary-premium">P&L</Link>
                 </div>
             </div>
 
-            <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0 2rem' }}>
-
-                {/* Report Card */}
-                <div className="card" style={{ padding: '0', overflow: 'hidden' }}>
-                    <div style={{ padding: '2rem', background: '#1e293b' }}>
-
-                        {/* Assets Section */}
-                        <div style={{ marginBottom: '2rem' }}>
-                            <h2 style={{ fontSize: '1.2rem', fontWeight: 'bold', color: '#34d399', marginBottom: '1rem', borderBottom: '1px solid rgba(52, 211, 153, 0.2)', paddingBottom: '0.5rem' }}>Assets</h2>
-
+            <div style={{ maxWidth: '900px', margin: '0 auto' }}>
+                <div className="card" style={{ padding: '2.5rem' }}>
+                    {/* Assets Section */}
+                    <div style={{ marginBottom: '2.5rem' }}>
+                        <h2 style={{ fontSize: '0.8rem', fontWeight: '800', color: 'var(--success)', marginBottom: '1.25rem', borderBottom: '1px solid var(--glass-border)', paddingBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Assets</h2>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                             {report.assets.map(a => (
-                                <div key={a.id} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', fontSize: '0.9rem' }}>
-                                    <span>{a.code} - {a.name}</span>
-                                    <span>{formatMoney(a.balance)}</span>
+                                <div key={a.id} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '1rem', fontWeight: '500' }}>
+                                    <span><span style={{ color: 'var(--muted)', width: '60px', display: 'inline-block' }}>{a.code}</span> {a.name}</span>
+                                    <span style={{ fontWeight: '700' }}>{formatMoney(a.balance)}</span>
                                 </div>
                             ))}
-
-                            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '1rem', fontWeight: 'bold', borderTop: '1px solid #334155', paddingTop: '0.5rem' }}>
-                                <span>Total Assets</span>
-                                <span>{formatMoney(report.totalAssets)}</span>
-                            </div>
                         </div>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '1.5rem', fontWeight: '800', borderTop: '2px solid var(--glass-border)', paddingTop: '1rem', fontSize: '1.1rem' }}>
+                            <span>Total Assets</span>
+                            <span style={{ color: 'var(--success)' }}>{formatMoney(report.totalAssets)}</span>
+                        </div>
+                    </div>
 
-                        {/* Liabilities Section */}
-                        <div style={{ marginBottom: '2rem' }}>
-                            <h2 style={{ fontSize: '1.2rem', fontWeight: 'bold', color: '#f87171', marginBottom: '1rem', borderBottom: '1px solid rgba(248, 113, 113, 0.2)', paddingBottom: '0.5rem' }}>Liabilities</h2>
-
+                    {/* Liabilities Section */}
+                    <div style={{ marginBottom: '2.5rem' }}>
+                        <h2 style={{ fontSize: '0.8rem', fontWeight: '800', color: 'var(--danger)', marginBottom: '1.25rem', borderBottom: '1px solid var(--glass-border)', paddingBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Liabilities</h2>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                             {report.liabilities.map(a => (
-                                <div key={a.id} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', fontSize: '0.9rem' }}>
-                                    <span>{a.code} - {a.name}</span>
-                                    <span>{formatMoney(a.balance)}</span>
+                                <div key={a.id} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '1rem', fontWeight: '500' }}>
+                                    <span><span style={{ color: 'var(--muted)', width: '60px', display: 'inline-block' }}>{a.code}</span> {a.name}</span>
+                                    <span style={{ fontWeight: '700' }}>{formatMoney(a.balance)}</span>
                                 </div>
                             ))}
-
-                            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '1rem', fontWeight: 'bold', borderTop: '1px solid #334155', paddingTop: '0.5rem' }}>
-                                <span>Total Liabilities</span>
-                                <span>{formatMoney(report.totalLiabilities)}</span>
-                            </div>
                         </div>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '1.5rem', fontWeight: '800', borderTop: '2px solid var(--glass-border)', paddingTop: '1rem', fontSize: '1.1rem' }}>
+                            <span>Total Liabilities</span>
+                            <span style={{ color: 'var(--danger)' }}>{formatMoney(report.totalLiabilities)}</span>
+                        </div>
+                    </div>
 
-                        {/* Equity Section */}
-                        <div style={{ marginBottom: '2rem' }}>
-                            <h2 style={{ fontSize: '1.2rem', fontWeight: 'bold', color: '#60a5fa', marginBottom: '1rem', borderBottom: '1px solid rgba(96, 165, 250, 0.2)', paddingBottom: '0.5rem' }}>Equity</h2>
-
+                    {/* Equity Section */}
+                    <div style={{ marginBottom: '3rem' }}>
+                        <h2 style={{ fontSize: '0.8rem', fontWeight: '800', color: 'var(--primary)', marginBottom: '1.25rem', borderBottom: '1px solid var(--glass-border)', paddingBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Equity</h2>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                             {report.equity.map(a => (
-                                <div key={a.id} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', fontSize: '0.9rem' }}>
-                                    <span>{a.code} - {a.name}</span>
-                                    <span>{formatMoney(a.balance)}</span>
+                                <div key={a.id} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '1rem', fontWeight: '500' }}>
+                                    <span><span style={{ color: 'var(--muted)', width: '60px', display: 'inline-block' }}>{a.code}</span> {a.name}</span>
+                                    <span style={{ fontWeight: '700' }}>{formatMoney(a.balance)}</span>
                                 </div>
                             ))}
-
-                            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', fontSize: '0.9rem', color: '#94a3b8' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '1rem', color: 'var(--muted)', fontWeight: '500' }}>
                                 <span>Retained Earnings (Net Income)</span>
                                 <span>{formatMoney(report.lifetimeNetIncome)}</span>
                             </div>
-
-                            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '1rem', fontWeight: 'bold', borderTop: '1px solid #334155', paddingTop: '0.5rem' }}>
-                                <span>Total Equity</span>
-                                <span>{formatMoney(report.totalEquity)}</span>
-                            </div>
                         </div>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '1.5rem', fontWeight: '800', borderTop: '2px solid var(--glass-border)', paddingTop: '1rem', fontSize: '1.1rem' }}>
+                            <span>Total Equity</span>
+                            <span style={{ color: 'var(--primary)' }}>{formatMoney(report.totalEquity)}</span>
+                        </div>
+                    </div>
 
-                        {/* Check */}
-                        <div style={{
-                            marginTop: '2rem', paddingTop: '1rem', borderTop: '2px dashed #475569',
-                            display: 'flex', justifyContent: 'space-between', alignItems: 'center'
-                        }}>
-                            <div style={{ fontSize: '0.9rem', color: '#94a3b8' }}>
-                                Liabilities + Equity
-                            </div>
-                            <div style={{ fontWeight: 'bold', fontSize: '1.2rem', color: Math.abs(report.totalAssets - (report.totalLiabilities + report.totalEquity)) < 0.01 ? '#34d399' : '#f87171' }}>
+                    {/* Final Balance Verification */}
+                    <div style={{
+                        marginTop: '1rem', padding: '2rem', borderRadius: 'var(--radius-md)',
+                        background: 'var(--surface-hover)', border: '1px solid var(--glass-border)',
+                        display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                        boxShadow: 'var(--glass-shadow)'
+                    }}>
+                        <div>
+                            <div style={{ fontSize: '0.75rem', color: 'var(--muted)', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.25rem' }}>Liabilities + Equity</div>
+                            <div style={{ fontSize: '1.5rem', fontWeight: '900', color: 'var(--foreground)' }}>
                                 {formatMoney(report.totalLiabilities + report.totalEquity)}
                             </div>
                         </div>
-                        {Math.abs(report.totalAssets - (report.totalLiabilities + report.totalEquity)) >= 0.01 && (
-                            <div style={{ color: '#f87171', fontSize: '0.8rem', textAlign: 'right', marginTop: '0.5rem' }}>
-                                ⚠️ Balance Sheet is out of balance! Check ledger integrity.
+                        <div style={{ textAlign: 'right' }}>
+                            <div style={{ fontSize: '0.75rem', color: 'var(--muted)', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.25rem' }}>Status</div>
+                            <div style={{
+                                fontWeight: '900',
+                                fontSize: '1.25rem',
+                                color: Math.abs(report.totalAssets - (report.totalLiabilities + report.totalEquity)) < 0.01 ? 'var(--success)' : 'var(--danger)',
+                                background: Math.abs(report.totalAssets - (report.totalLiabilities + report.totalEquity)) < 0.01 ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)',
+                                padding: '0.25rem 0.75rem',
+                                borderRadius: '8px'
+                            }}>
+                                {Math.abs(report.totalAssets - (report.totalLiabilities + report.totalEquity)) < 0.01 ? 'BALANCED' : 'OUT OF BALANCE'}
                             </div>
-                        )}
-
+                        </div>
                     </div>
                 </div>
             </div>
-        </main>
+        </div>
     );
 }

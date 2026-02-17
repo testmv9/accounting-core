@@ -9,8 +9,6 @@ import {
 } from "../../../lib/actions";
 import ReconcileRow from "./reconcile-row";
 import CsvUploader from "./csv-uploader";
-import { HeaderWrapper } from "../../../components/brand";
-
 import { auth } from "@/auth";
 
 export default async function ReconcilePage() {
@@ -29,60 +27,66 @@ export default async function ReconcilePage() {
     ]);
 
     const bankAccounts = accounts.filter(a => a.type === 'ASSET' && (a.name.toLowerCase().includes('bank') || a.name.toLowerCase().includes('cash')));
-
-    // Filter to only approved/awaiting payment
     const openInvoices = invoices.filter(i => i.status === 'AWAITING_PAYMENT');
     const openBills = bills.filter(b => b.status === 'APPROVED');
 
     return (
-        <main style={{ maxWidth: '1200px', margin: '0 auto', paddingBottom: '4rem' }}>
-            <HeaderWrapper>
-                <div style={{ display: 'flex', gap: '1rem' }}>
-                    <Link href="/banking/rules" className="btn btn-secondary" style={{ textDecoration: 'none', padding: '0.5rem 1rem', fontSize: '0.8rem' }}>
+        <div style={{ animation: 'fadeIn 0.5s ease-out' }}>
+            <div className="page-header">
+                <div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.5rem' }}>
+                        <Link href="/" style={{ color: 'var(--muted)', textDecoration: 'none', fontSize: '0.85rem', fontWeight: '600' }}>Dashboard</Link>
+                        <span style={{ color: 'var(--muted)', fontSize: '0.8rem' }}>/</span>
+                        <span style={{ color: 'var(--foreground)', fontSize: '0.85rem', fontWeight: '600' }}>Banking</span>
+                    </div>
+                    <h1 className="page-title">Bank Reconciliation</h1>
+                </div>
+                <div style={{ display: 'flex', gap: '0.75rem' }}>
+                    <Link href="/banking/rules" className="btn-secondary-premium">
                         Manage Rules ⚙️
                     </Link>
                     <form action={simulateBankImportAction}>
-                        <button className="btn btn-secondary" type="submit" style={{ padding: '0.5rem 1rem', fontSize: '0.8rem' }}>
+                        <button className="btn-premium" type="submit">
                             Simulate Import
                         </button>
                     </form>
                 </div>
-            </HeaderWrapper>
-
-            <div style={{ padding: '2rem' }}>
-                <Link href="/" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '0.9rem' }}>
-                    ← Dashboard
-                </Link>
-                <h1 style={{ fontSize: '2rem', fontWeight: 'bold', marginTop: '0.5rem', marginBottom: '2rem' }}>Bank Reconciliation</h1>
             </div>
 
-            <CsvUploader
-                bankAccounts={bankAccounts}
-                onImport={async (data, bankId) => {
-                    'use server';
-                    await importBankTransactionsAction(data, bankId);
-                }}
-            />
+            <div style={{ display: 'grid', gap: '2rem' }}>
+                <CsvUploader
+                    bankAccounts={bankAccounts}
+                    onImport={async (data, bankId) => {
+                        'use server';
+                        await importBankTransactionsAction(data, bankId);
+                    }}
+                />
 
-            {transactions.length === 0 ? (
-                <div className="card" style={{ padding: '4rem', textAlign: 'center', color: '#94a3b8' }}>
-                    <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>✅</div>
-                    <h2>All caught up!</h2>
-                    <p>No new transactions to reconcile.</p>
-                </div>
-            ) : (
-                <div style={{ display: 'grid' }}>
-                    {transactions.map((tx) => (
-                        <ReconcileRow
-                            key={tx.id}
-                            tx={tx}
-                            openInvoices={openInvoices}
-                            openBills={openBills}
-                            accounts={accounts}
-                        />
-                    ))}
-                </div>
-            )}
-        </main>
+                {transactions.length === 0 ? (
+                    <div className="card" style={{ padding: '5rem 2rem', textAlign: 'center' }}>
+                        <div style={{ fontSize: '3.5rem', marginBottom: '1.5rem', filter: 'drop-shadow(0 0 15px var(--primary-glow))' }}>✨</div>
+                        <h2 style={{ fontSize: '1.5rem', fontWeight: '800', marginBottom: '0.5rem' }}>All caught up!</h2>
+                        <p style={{ color: 'var(--muted)' }}>Your bank statements are perfectly in sync with your ledger.</p>
+                    </div>
+                ) : (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 0.5rem' }}>
+                            <h3 style={{ fontSize: '0.85rem', fontWeight: '800', color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                                {transactions.length} Transactions to Reconcile
+                            </h3>
+                        </div>
+                        {transactions.map((tx) => (
+                            <ReconcileRow
+                                key={tx.id}
+                                tx={tx}
+                                openInvoices={openInvoices}
+                                openBills={openBills}
+                                accounts={accounts}
+                            />
+                        ))}
+                    </div>
+                )}
+            </div>
+        </div>
     );
 }

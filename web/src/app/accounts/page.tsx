@@ -2,7 +2,6 @@ import Link from "next/link";
 import { getDashboardData, archiveAccountAction } from "../../lib/actions";
 import AccountForm from "../../components/account-form";
 import { auth } from "@/auth";
-import { HeaderWrapper } from "../../components/brand";
 
 export default async function AccountsPage() {
     const session = await auth();
@@ -15,45 +14,41 @@ export default async function AccountsPage() {
     const accounts = await getDashboardData(tenantId);
 
     return (
-        <main style={{ maxWidth: '1200px', margin: '0 auto', paddingBottom: '4rem' }}>
-            <HeaderWrapper>
-                <Link href="/" className="btn btn-secondary" style={{ textDecoration: 'none', padding: '0.5rem 1rem', fontSize: '0.8rem' }}>
-                    ← Dashboard
-                </Link>
-            </HeaderWrapper>
-
-            <div style={{ padding: '2rem' }}>
-                <h1 style={{ fontSize: '2.5rem', fontWeight: 'bold', marginBottom: '2rem', background: 'linear-gradient(to right, #fff, #94a3b8)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-                    Chart of Accounts
-                </h1>
-
-                {/* Create Form */}
-                <div style={{ marginBottom: '2rem' }}>
-                    <AccountForm />
+        <div style={{ animation: 'fadeIn 0.5s ease-out' }}>
+            <div className="page-header">
+                <div>
+                    <h1 className="page-title">Chart of Accounts</h1>
+                    <p style={{ color: 'var(--muted)', marginTop: '0.25rem' }}>Management of your organization's ledger structure</p>
                 </div>
+                <Link href="/" className="btn-secondary-premium">
+                    Dashboard
+                </Link>
+            </div>
 
-                {/* Account List */}
+            <div style={{ display: 'grid', gap: '2.5rem' }}>
+                <AccountForm />
+
                 <div className="card" style={{ padding: '0', overflow: 'hidden' }}>
-                    <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+                    <table className="table-premium">
                         <thead>
-                            <tr style={{ background: 'rgba(255,255,255,0.05)', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
-                                <th style={{ padding: '1rem', fontSize: '0.8rem', color: '#94a3b8', textTransform: 'uppercase', textAlign: 'left' }}>Type</th>
-                                <th style={{ padding: '1rem', fontSize: '0.8rem', color: '#94a3b8', textTransform: 'uppercase', textAlign: 'left' }}>Code</th>
-                                <th style={{ padding: '1rem', fontSize: '0.8rem', color: '#94a3b8', textTransform: 'uppercase', textAlign: 'left' }}>Name</th>
-                                <th style={{ padding: '1rem', fontSize: '0.8rem', color: '#94a3b8', textTransform: 'uppercase', textAlign: 'right' }}>Balance</th>
-                                <th style={{ padding: '1rem', fontSize: '0.8rem', color: '#94a3b8', textTransform: 'uppercase', textAlign: 'center' }}>Action</th>
+                            <tr>
+                                <th>Type</th>
+                                <th>Code</th>
+                                <th>Name</th>
+                                <th style={{ textAlign: 'right' }}>Balance</th>
+                                <th style={{ textAlign: 'center' }}>Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {accounts.map((acc, i) => (
-                                <tr key={acc.id} style={{ borderBottom: i < accounts.length - 1 ? '1px solid rgba(255,255,255,0.05)' : 'none' }}>
-                                    <td style={{ padding: '1rem', color: '#64748b', fontSize: '0.9rem' }}>{acc.type}</td>
-                                    <td style={{ padding: '1rem', color: '#fff', fontWeight: 'bold' }}>{acc.code}</td>
-                                    <td style={{ padding: '1rem' }}>{acc.name}</td>
-                                    <td style={{ padding: '1rem', textAlign: 'right', fontWeight: '500' }}>{acc.formattedBalance}</td>
-                                    <td style={{ padding: '1rem', textAlign: 'center' }}>
+                            {accounts.map((acc) => (
+                                <tr key={acc.id}>
+                                    <td style={{ color: 'var(--muted)', fontSize: '0.85rem', fontWeight: '600' }}>{acc.type}</td>
+                                    <td style={{ color: 'var(--primary)', fontWeight: '800', fontFamily: 'var(--font-geist-mono)' }}>{acc.code}</td>
+                                    <td style={{ fontWeight: '600' }}>{acc.name}</td>
+                                    <td style={{ textAlign: 'right', fontWeight: '800' }}>{acc.formattedBalance}</td>
+                                    <td style={{ textAlign: 'center' }}>
                                         <form action={archiveAccountAction.bind(null, acc.id)}>
-                                            <button className="btn-secondary" style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem', color: '#f87171', border: '1px solid rgba(248,113,113,0.2)', cursor: 'pointer' }}>
+                                            <button className="btn-secondary-premium" style={{ color: 'var(--danger)', borderColor: 'rgba(239, 68, 68, 0.2)', padding: '0.4rem 0.8rem', fontSize: '0.75rem' }}>
                                                 Archive
                                             </button>
                                         </form>
@@ -64,6 +59,6 @@ export default async function AccountsPage() {
                     </table>
                 </div>
             </div>
-        </main>
+        </div>
     );
 }

@@ -67,26 +67,3 @@ export function Logo({ size = 42 }: { size?: number }) {
     );
 }
 
-export function HeaderWrapper({ children }: { children: React.ReactNode }) {
-    return (
-        <header style={{
-            padding: '1.5rem 2rem',
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            borderBottom: '1px solid rgba(255,255,255,0.05)',
-            background: 'rgba(15, 23, 42, 0.5)',
-            backdropFilter: 'blur(10px)',
-            position: 'sticky',
-            top: 0,
-            zIndex: 100
-        }}>
-            <Link href="/" style={{ textDecoration: 'none' }}>
-                <Logo />
-            </Link>
-            <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-                {children}
-            </div>
-        </header>
-    );
-}

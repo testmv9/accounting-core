@@ -1,13 +1,11 @@
 import Link from "next/link";
 import { getDashboardData, getUnreconciledTransactionsAction } from "../lib/actions";
 import TransactionForm from "../components/transaction-form";
-import { auth, signOut } from "@/auth";
-import { HeaderWrapper } from "../components/brand";
+import { auth } from "@/auth";
 
 export default async function Dashboard() {
   const session = await auth();
   const tenantId = (session?.user as any)?.activeTenantId;
-  console.log('Dashboard Render Start', { tenantId });
 
   if (!tenantId) {
     return (
@@ -51,27 +49,24 @@ export default async function Dashboard() {
 
   return (
     <div style={{ animation: 'fadeIn 0.5s ease-out' }}>
-      <header style={{ marginBottom: '3rem' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <div>
-            <h1 style={{ fontSize: '2rem', fontWeight: '800', letterSpacing: '-0.025em', marginBottom: '0.25rem' }}>Financial Command</h1>
-            <p style={{ color: 'var(--muted)', fontSize: '0.95rem' }}>Welcome back, {session?.user?.name || 'Commander'}</p>
-          </div>
-          <div style={{ display: 'flex', gap: '1rem' }}>
-            <Link href="/banking/reconcile" className="btn-premium">
-              <span>🏦</span> Banking
-            </Link>
-          </div>
+      <div className="page-header">
+        <div>
+          <h1 className="page-title">Command Center</h1>
+          <p style={{ color: 'var(--muted)', marginTop: '0.25rem' }}>Welcome back, Commander {session?.user?.name}</p>
         </div>
-      </header>
+        <div style={{ display: 'flex', gap: '0.75rem' }}>
+          <Link href="/banking/reconcile" className="btn-secondary-premium">Banking</Link>
+          <Link href="/invoices/new" className="btn-premium">+ New Invoice</Link>
+        </div>
+      </div>
 
       {unreconciled.length > 0 && (
         <Link href="/banking/reconcile" style={{ textDecoration: 'none' }}>
-          <div className="card" style={{ marginBottom: '2.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'linear-gradient(90deg, rgba(56, 189, 248, 0.1), transparent)', borderColor: 'var(--primary-glow)' }}>
+          <div className="card" style={{ marginBottom: '2.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'linear-gradient(90deg, rgba(56, 189, 248, 0.05), transparent)', borderColor: 'var(--primary-glow)' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
-              <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'rgba(56, 189, 248, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem' }}>❕</div>
+              <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'rgba(56, 189, 248, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem' }}>❕</div>
               <div>
-                <div style={{ fontWeight: '800', fontSize: '1.1rem', color: '#fff' }}>Reconciliation Required</div>
+                <div style={{ fontWeight: '800', fontSize: '1.1rem', color: 'var(--foreground)' }}>Reconciliation Required</div>
                 <div style={{ color: 'var(--muted)', fontSize: '0.9rem' }}>You have <strong>{unreconciled.length}</strong> transactions waiting for review.</div>
               </div>
             </div>
@@ -84,28 +79,28 @@ export default async function Dashboard() {
       <section style={{ marginBottom: '4rem' }}>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem' }}>
           <div className="card">
-            <div style={{ color: 'var(--muted)', fontSize: '0.8rem', fontWeight: '700', textTransform: 'uppercase', marginBottom: '1rem', letterSpacing: '0.05em' }}>Total Cash & Assets</div>
+            <div style={{ color: 'var(--muted)', fontSize: '0.8rem', fontWeight: '800', textTransform: 'uppercase', marginBottom: '1rem', letterSpacing: '0.05em' }}>Total Cash & Assets</div>
             <div className="stat-value" style={{ color: 'var(--success)', background: 'none', WebkitTextFillColor: 'unset' }}>{format(totalAssets)}</div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '1rem', color: 'var(--success)', fontSize: '0.85rem', fontWeight: '600' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '1rem', color: 'var(--success)', fontSize: '0.85rem', fontWeight: '700' }}>
               <span>↑ 12%</span>
               <span style={{ color: 'var(--muted)', fontWeight: '400' }}>vs last month</span>
             </div>
           </div>
 
           <div className="card">
-            <div style={{ color: 'var(--muted)', fontSize: '0.8rem', fontWeight: '700', textTransform: 'uppercase', marginBottom: '1rem', letterSpacing: '0.05em' }}>Revenue YTD</div>
+            <div style={{ color: 'var(--muted)', fontSize: '0.8rem', fontWeight: '800', textTransform: 'uppercase', marginBottom: '1rem', letterSpacing: '0.05em' }}>Revenue YTD</div>
             <div className="stat-value">{format(totalRevenue)}</div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '1rem', color: 'var(--muted)', fontSize: '0.85rem' }}>
-              <span>Stable performance</span>
+              <span style={{ fontWeight: '600' }}>Stable performance</span>
             </div>
           </div>
 
           <div className="card">
-            <div style={{ color: 'var(--muted)', fontSize: '0.8rem', fontWeight: '700', textTransform: 'uppercase', marginBottom: '1rem', letterSpacing: '0.05em' }}>Net Runway</div>
+            <div style={{ color: 'var(--muted)', fontSize: '0.8rem', fontWeight: '800', textTransform: 'uppercase', marginBottom: '1rem', letterSpacing: '0.05em' }}>Net Runway</div>
             <div className="stat-value" style={{ color: 'var(--primary)', background: 'none', WebkitTextFillColor: 'unset' }}>∞</div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '1rem', color: 'var(--primary)', fontSize: '0.85rem', fontWeight: '600' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '1rem', color: 'var(--primary)', fontSize: '0.85rem', fontWeight: '700' }}>
               <span>Infinite</span>
-              <span style={{ color: 'var(--muted)', fontWeight: '400' }}>burn rate neutral</span>
+              <span style={{ color: 'var(--muted)', fontWeight: '400', marginLeft: '4px' }}>fixed burn</span>
             </div>
           </div>
         </div>
@@ -114,20 +109,20 @@ export default async function Dashboard() {
       {/* Watchlist Section */}
       {accounts.some(a => a.showOnDashboard) && (
         <section style={{ marginBottom: '4rem' }}>
-          <h2 style={{ fontSize: '1.25rem', fontWeight: '800', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <span style={{ color: 'var(--primary)' }}>◈</span> Account Watchlist
+          <h2 style={{ fontSize: '1.15rem', fontWeight: '800', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+            <span style={{ color: 'var(--primary)', opacity: 0.5 }}>◈</span> Account Watchlist
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.5rem' }}>
             {accounts.filter(a => a.showOnDashboard).map((acc) => (
-              <div key={acc.id} className="card" style={{ padding: '1.25rem' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+              <div key={acc.id} className="card" style={{ padding: '1.5rem' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
                   <span style={{ background: 'var(--surface-hover)', padding: '0.2rem 0.5rem', borderRadius: '4px', fontSize: '0.7rem', fontWeight: '800', color: 'var(--muted)' }}>{acc.code}</span>
-                  <span style={{ fontSize: '0.65rem', fontWeight: 'bold', color: 'var(--primary)', textTransform: 'uppercase' }}>{acc.type}</span>
+                  <span style={{ fontSize: '0.65rem', fontWeight: '800', color: 'var(--primary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{acc.type}</span>
                 </div>
-                <div style={{ fontSize: '1.25rem', fontWeight: '800', color: '#fff', marginBottom: '0.25rem' }}>
+                <div style={{ fontSize: '1.5rem', fontWeight: '800', color: 'var(--foreground)', marginBottom: '0.25rem' }}>
                   {acc.formattedBalance}
                 </div>
-                <div style={{ fontSize: '0.85rem', color: 'var(--muted)' }}>{acc.name}</div>
+                <div style={{ fontSize: '0.85rem', color: 'var(--muted)', fontWeight: '500' }}>{acc.name}</div>
               </div>
             ))}
           </div>
@@ -136,8 +131,8 @@ export default async function Dashboard() {
 
       {/* Action Section */}
       <section style={{ marginBottom: '4rem' }}>
-        <h2 style={{ fontSize: '1.25rem', fontWeight: '800', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          <span style={{ color: 'var(--secondary)' }}>◈</span> Quick Entry
+        <h2 style={{ fontSize: '1.15rem', fontWeight: '800', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+          <span style={{ color: 'var(--secondary)', opacity: 0.5 }}>◈</span> Quick Entry
         </h2>
         <div className="card">
           <TransactionForm accounts={accounts} tenantId={tenantId} />
@@ -146,31 +141,31 @@ export default async function Dashboard() {
 
       {/* Full Balances */}
       <section>
-        <h2 style={{ fontSize: '1.25rem', fontWeight: '800', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          <span style={{ color: 'var(--muted)' }}>◈</span> Full Ledger Overview
+        <h2 style={{ fontSize: '1.15rem', fontWeight: '800', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+          <span style={{ color: 'var(--muted)', opacity: 0.5 }}>◈</span> Full Ledger Overview
         </h2>
         <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+          <table className="table-premium">
             <thead>
-              <tr style={{ background: 'var(--surface-hover)', borderBottom: '1px solid var(--glass-border)' }}>
-                <th style={{ padding: '1rem 1.5rem', fontSize: '0.75rem', fontWeight: '800', color: 'var(--muted)', textTransform: 'uppercase' }}>Account</th>
-                <th style={{ padding: '1rem 1.5rem', fontSize: '0.75rem', fontWeight: '800', color: 'var(--muted)', textTransform: 'uppercase' }}>Type</th>
-                <th style={{ padding: '1rem 1.5rem', fontSize: '0.75rem', fontWeight: '800', color: 'var(--muted)', textTransform: 'uppercase', textAlign: 'right' }}>Balance</th>
+              <tr>
+                <th>Account</th>
+                <th>Type</th>
+                <th style={{ textAlign: 'right' }}>Balance</th>
               </tr>
             </thead>
             <tbody>
               {accounts.map((acc) => (
-                <tr key={acc.id} style={{ borderBottom: '1px solid var(--glass-border)', transition: 'background 0.2s' }}>
+                <tr key={acc.id}>
                   <td style={{ padding: '1.25rem 1.5rem' }}>
-                    <div style={{ fontWeight: '700', color: '#fff' }}>{acc.name}</div>
-                    <div style={{ fontSize: '0.75rem', color: 'var(--muted)' }}>{acc.code}</div>
+                    <div style={{ fontWeight: '700', color: 'var(--foreground)' }}>{acc.name}</div>
+                    <div style={{ fontSize: '0.75rem', color: 'var(--muted)', fontWeight: '600' }}>{acc.code}</div>
                   </td>
-                  <td style={{ padding: '1.25rem 1.5rem' }}>
-                    <span style={{ color: 'var(--primary)', fontSize: '0.75rem', fontWeight: '700' }}>{acc.type}</span>
+                  <td>
+                    <span style={{ color: 'var(--primary)', fontSize: '0.75rem', fontWeight: '800', letterSpacing: '0.05em' }}>{acc.type}</span>
                   </td>
-                  <td style={{ padding: '1.25rem 1.5rem', textAlign: 'right' }}>
-                    <div style={{ fontWeight: '800', color: '#fff', fontSize: '1.1rem' }}>{acc.formattedBalance}</div>
-                    <div style={{ fontSize: '0.65rem', color: acc.type === 'ASSET' || acc.type === 'EXPENSE' ? 'var(--success)' : 'var(--danger)', fontWeight: '900' }}>
+                  <td style={{ textAlign: 'right' }}>
+                    <div style={{ fontWeight: '800', color: 'var(--foreground)', fontSize: '1.1rem' }}>{acc.formattedBalance}</div>
+                    <div style={{ fontSize: '0.65rem', color: acc.type === 'ASSET' || acc.type === 'EXPENSE' ? 'var(--success)' : 'var(--danger)', fontWeight: '900', letterSpacing: '0.05em' }}>
                       {acc.type === 'ASSET' || acc.type === 'EXPENSE' ? 'DEBIT' : 'CREDIT'}
                     </div>
                   </td>
