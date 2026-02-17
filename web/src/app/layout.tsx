@@ -19,15 +19,38 @@ export const metadata: Metadata = {
   description: "Navigate your finances with ease.",
 };
 
-export default function RootLayout({
+import { auth } from "@/auth";
+import Sidebar from "../components/Sidebar";
+import { getUnreconciledTransactionsAction } from "../lib/actions";
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await auth();
+  const tenantId = (session?.user as any)?.activeTenantId;
+
+  // Fetch unreconciled count if logged in
+  let unreconciledCount = 0;
+  if (tenantId) {
+    const unreconciled = await getUnreconciledTransactionsAction(tenantId);
+    unreconciledCount = unreconciled.length;
+  }
+
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        {children}
+        {tenantId ? (
+          <div className="app-container">
+            <Sidebar unreconciledCount={unreconciledCount} />
+            <main className="main-content">
+              {children}
+            </main>
+          </div>
+        ) : (
+          children
+        )}
       </body>
     </html>
   );

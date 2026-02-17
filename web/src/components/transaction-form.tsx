@@ -95,20 +95,20 @@ export default function TransactionForm({ accounts, tenantId }: { accounts: Acco
                 <h2 className="section-title" style={{ margin: 0, border: 'none' }}>Post Transaction</h2>
 
                 {/* Mode Toggles */}
-                <div style={{ background: 'rgba(255,255,255,0.05)', padding: '0.3rem', borderRadius: '8px', display: 'flex', gap: '0.2rem' }}>
+                <div style={{ background: 'var(--surface-hover)', padding: '0.3rem', borderRadius: '10px', display: 'flex', gap: '0.2rem' }}>
                     <button
                         type="button"
                         onClick={() => setMode('quick')}
-                        className={`btn ${mode === 'quick' ? '' : 'btn-secondary'}`}
-                        style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem' }}
+                        className={`nav-link ${mode === 'quick' ? 'active' : ''}`}
+                        style={{ padding: '0.5rem 1rem', fontSize: '0.8rem', border: 'none', background: mode === 'quick' ? 'rgba(56, 189, 248, 0.1)' : 'transparent' }}
                     >
                         Easy Spend/Receive
                     </button>
                     <button
                         type="button"
                         onClick={() => setMode('journal')}
-                        className={`btn ${mode === 'journal' ? '' : 'btn-secondary'}`}
-                        style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem' }}
+                        className={`nav-link ${mode === 'journal' ? 'active' : ''}`}
+                        style={{ padding: '0.5rem 1rem', fontSize: '0.8rem', border: 'none', background: mode === 'journal' ? 'rgba(56, 189, 248, 0.1)' : 'transparent' }}
                     >
                         Manual Journal
                     </button>
@@ -118,11 +118,11 @@ export default function TransactionForm({ accounts, tenantId }: { accounts: Acco
             <form onSubmit={handleSubmit}>
 
                 {/* Shared Header (Date & Description) */}
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 2.5fr', gap: '1.5rem', marginBottom: '1.5rem' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 3.5fr', gap: '1.5rem', marginBottom: '2rem' }}>
                     <div>
-                        <label className="card-label" style={{ display: 'block', marginBottom: '0.5rem' }}>Date</label>
+                        <label style={{ fontSize: '0.75rem', fontWeight: '800', color: 'var(--muted)', display: 'block', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Date</label>
                         <input
-                            className="input"
+                            className="input-premium"
                             type="date"
                             value={date}
                             onChange={e => setDate(e.target.value)}
@@ -130,82 +130,83 @@ export default function TransactionForm({ accounts, tenantId }: { accounts: Acco
                         />
                     </div>
                     <div>
-                        <label className="card-label" style={{ display: 'block', marginBottom: '0.5rem' }}>Description</label>
+                        <label style={{ fontSize: '0.75rem', fontWeight: '800', color: 'var(--muted)', display: 'block', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Description</label>
                         <input
-                            className="input"
+                            className="input-premium"
                             placeholder="e.g. Office Supplies, Monthly Subscription..."
                             value={description}
                             onChange={e => setDescription(e.target.value)}
                             required
-                            style={{ width: '100%' }}
                         />
                     </div>
                 </div>
 
                 {mode === 'quick' ? (
-                    <div style={{ background: 'rgba(255,255,255,0.03)', padding: '1.5rem', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.05)', marginBottom: '1.5rem' }}>
-                        <div style={{ display: 'flex', gap: '1rem', marginBottom: '1.5rem' }}>
+                    <div style={{ background: 'rgba(255,255,255,0.02)', padding: '1.5rem', borderRadius: '12px', border: '1px solid var(--glass-border)', marginBottom: '2rem' }}>
+                        <div style={{ display: 'flex', gap: '1rem', marginBottom: '2rem' }}>
                             <button
                                 type="button"
                                 onClick={() => setQuickType('spend')}
                                 style={{
-                                    flex: 1, padding: '1rem', borderRadius: '8px', border: '1px solid',
-                                    borderColor: quickType === 'spend' ? '#38bdf8' : 'rgba(255,255,255,0.1)',
+                                    flex: 1, padding: '1rem', borderRadius: '12px', border: '1px solid',
+                                    borderColor: quickType === 'spend' ? 'var(--primary)' : 'var(--glass-border)',
                                     background: quickType === 'spend' ? 'rgba(56,189,248,0.1)' : 'transparent',
-                                    color: quickType === 'spend' ? '#38bdf8' : '#fff',
-                                    cursor: 'pointer', fontWeight: 'bold'
+                                    color: quickType === 'spend' ? 'var(--primary)' : 'var(--muted)',
+                                    cursor: 'pointer', fontWeight: '800', transition: '0.2s'
                                 }}
                             >
-                                Spend Money 💸
+                                💸 Spend Money
                             </button>
                             <button
                                 type="button"
                                 onClick={() => setQuickType('receive')}
                                 style={{
-                                    flex: 1, padding: '1rem', borderRadius: '8px', border: '1px solid',
-                                    borderColor: quickType === 'receive' ? '#34d399' : 'rgba(255,255,255,0.1)',
-                                    background: quickType === 'receive' ? 'rgba(52,211,153,0.1)' : 'transparent',
-                                    color: quickType === 'receive' ? '#34d399' : '#fff',
-                                    cursor: 'pointer', fontWeight: 'bold'
+                                    flex: 1, padding: '1rem', borderRadius: '12px', border: '1px solid',
+                                    borderColor: quickType === 'receive' ? 'var(--success)' : 'var(--glass-border)',
+                                    background: quickType === 'receive' ? 'rgba(16,185,129,0.1)' : 'transparent',
+                                    color: quickType === 'receive' ? 'var(--success)' : 'var(--muted)',
+                                    cursor: 'pointer', fontWeight: '800', transition: '0.2s'
                                 }}
                             >
-                                Receive Money 💰
+                                💰 Receive Money
                             </button>
                         </div>
 
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1rem' }}>
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1.5rem' }}>
                             <div>
-                                <label className="card-label" style={{ display: 'block', marginBottom: '0.5rem' }}>
+                                <label style={{ fontSize: '0.75rem', fontWeight: '800', color: 'var(--muted)', display: 'block', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
                                     {quickType === 'spend' ? 'Bank (Paid From)' : 'Bank (Deposited To)'}
                                 </label>
                                 <select
-                                    className="select"
+                                    className="input-premium"
                                     value={bankAccount}
                                     onChange={e => setBankAccount(e.target.value)}
                                     required={mode === 'quick'}
+                                    style={{ appearance: 'none' }}
                                 >
                                     <option value="">Select Bank...</option>
                                     {bankAccounts.map(a => <option key={a.id} value={a.id}>{a.code} - {a.name}</option>)}
                                 </select>
                             </div>
                             <div>
-                                <label className="card-label" style={{ display: 'block', marginBottom: '0.5rem' }}>
-                                    {quickType === 'spend' ? 'Category (Expense)' : 'Category (Revenue)'}
+                                <label style={{ fontSize: '0.75rem', fontWeight: '800', color: 'var(--muted)', display: 'block', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                                    Category
                                 </label>
                                 <select
-                                    className="select"
+                                    className="input-premium"
                                     value={categoryAccount}
                                     onChange={e => setCategoryAccount(e.target.value)}
                                     required={mode === 'quick'}
+                                    style={{ appearance: 'none' }}
                                 >
                                     <option value="">Select Category...</option>
                                     {categories.map(a => <option key={a.id} value={a.id}>{a.code} - {a.name}</option>)}
                                 </select>
                             </div>
                             <div>
-                                <label className="card-label" style={{ display: 'block', marginBottom: '0.5rem' }}>Amount ($)</label>
+                                <label style={{ fontSize: '0.75rem', fontWeight: '800', color: 'var(--muted)', display: 'block', marginBottom: '0.5rem', textTransform: 'uppercase' }}>Amount ($)</label>
                                 <input
-                                    className="input"
+                                    className="input-premium"
                                     type="number"
                                     step="0.01"
                                     placeholder="0.00"
@@ -218,20 +219,21 @@ export default function TransactionForm({ accounts, tenantId }: { accounts: Acco
                     </div>
                 ) : (
                     /* Manual Journal View */
-                    <div style={{ background: 'rgba(0,0,0,0.2)', padding: '1rem', borderRadius: '8px', marginBottom: '1.5rem' }}>
-                        <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: '1rem', marginBottom: '0.5rem', fontSize: '0.8rem', opacity: 0.7 }}>
-                            <div>ACCOUNT</div>
-                            <div>DEBIT ($)</div>
-                            <div>CREDIT ($)</div>
+                    <div style={{ background: 'rgba(0,0,0,0.2)', padding: '1.5rem', borderRadius: '12px', marginBottom: '2rem', border: '1px solid var(--glass-border)' }}>
+                        <div style={{ display: 'grid', gridTemplateColumns: '2.5fr 1fr 1fr', gap: '1rem', marginBottom: '1rem', fontSize: '0.7rem', fontWeight: '800', color: 'var(--muted)', textTransform: 'uppercase' }}>
+                            <div>Account</div>
+                            <div style={{ textAlign: 'right' }}>Debit ($)</div>
+                            <div style={{ textAlign: 'right' }}>Credit ($)</div>
                         </div>
 
                         {lines.map((line, idx) => (
-                            <div key={idx} style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: '1rem', marginBottom: '0.5rem' }}>
+                            <div key={idx} style={{ display: 'grid', gridTemplateColumns: '2.5fr 1fr 1fr', gap: '1rem', marginBottom: '0.75rem' }}>
                                 <select
-                                    className="select"
+                                    className="input-premium"
                                     value={line.accountId}
                                     onChange={e => updateLine(idx, 'accountId', e.target.value)}
                                     required={mode === 'journal' && idx < 2}
+                                    style={{ appearance: 'none' }}
                                 >
                                     <option value="">Select Account...</option>
                                     {accounts.map(a => (
@@ -239,33 +241,35 @@ export default function TransactionForm({ accounts, tenantId }: { accounts: Acco
                                     ))}
                                 </select>
                                 <input
-                                    className="input"
+                                    className="input-premium"
                                     type="number"
                                     placeholder="0.00"
                                     step="0.01"
                                     value={line.debit}
                                     onChange={e => updateLine(idx, 'debit', e.target.value)}
+                                    style={{ textAlign: 'right' }}
                                 />
                                 <input
-                                    className="input"
+                                    className="input-premium"
                                     type="number"
                                     placeholder="0.00"
                                     step="0.01"
                                     value={line.credit}
                                     onChange={e => updateLine(idx, 'credit', e.target.value)}
+                                    style={{ textAlign: 'right' }}
                                 />
                             </div>
                         ))}
 
-                        <button type="button" onClick={addLine} style={{ color: '#38bdf8', background: 'none', border: 'none', cursor: 'pointer', fontSize: '0.9rem' }}>
-                            + Add Line
+                        <button type="button" onClick={addLine} style={{ color: 'var(--primary)', background: 'none', border: 'none', cursor: 'pointer', fontSize: '0.9rem', fontWeight: '700', marginTop: '0.5rem' }}>
+                            + Add Another Line
                         </button>
                     </div>
                 )}
 
                 <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                    <button className="btn" disabled={loading} style={{ padding: '0.8rem 2rem' }}>
-                        {loading ? 'Processing...' : (mode === 'quick' ? 'Post Payment' : 'Post Journal Entry')}
+                    <button className="btn-premium" disabled={loading} style={{ padding: '0.85rem 3rem' }}>
+                        {loading ? 'Processing...' : (mode === 'quick' ? 'Confirm Payment' : 'Post Journal Entry')}
                     </button>
                 </div>
             </form>
