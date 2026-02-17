@@ -1,25 +1,20 @@
 /* Navera Premium Design System */
 
 :root {
-  /* Deep Modern Palette */
+  /* Default Dark Palette (Legacy/Current) */
   --background: #020617;
   --surface: #0f172a;
   --surface-hover: #1e293b;
   --foreground: #f8fafc;
   --muted: #94a3b8;
 
-  /* Brand Accents */
+  /* Brand Accents (Consistent) */
   --primary: #38bdf8;
-  /* Sky 400 */
-  --primary-glow: rgba(56, 189, 248, 0.3);
+  --primary-glow: rgba(56, 189, 248, 0.2);
   --secondary: #818cf8;
-  /* Indigo 400 */
   --success: #10b981;
-  /* Emerald 500 */
   --warning: #f59e0b;
-  /* Amber 500 */
   --danger: #ef4444;
-  /* Red 500 */
 
   /* Glassmorphism Tokens */
   --glass-bg: rgba(15, 23, 42, 0.65);
@@ -34,6 +29,22 @@
   --radius-md: 12px;
 }
 
+/* Light Theme Overrides (Xero-inspired) */
+[data-theme='light'] {
+  --background: #f8fafc;
+  --surface: #ffffff;
+  --surface-hover: #f1f5f9;
+  --foreground: #0f172a;
+  --muted: #64748b;
+
+  --glass-bg: rgba(255, 255, 255, 0.8);
+  --glass-border: rgba(0, 0, 0, 0.06);
+  --glass-blur: blur(10px);
+  --glass-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.05);
+
+  --primary-glow: rgba(56, 189, 248, 0.15);
+}
+
 * {
   box-sizing: border-box;
   padding: 0;
@@ -46,10 +57,12 @@ body {
   font-family: var(--font-geist-sans), system-ui, sans-serif;
   min-height: 100vh;
   overflow-x: hidden;
+  transition: background-color 0.3s ease, color 0.3s ease;
+
   /* Ambient Background Glows */
   background-image:
-    radial-gradient(circle at 0% 0%, rgba(56, 189, 248, 0.08) 0%, transparent 40%),
-    radial-gradient(circle at 100% 100%, rgba(129, 140, 248, 0.08) 0%, transparent 40%);
+    radial-gradient(circle at 0% 0%, var(--primary-glow) 0%, transparent 40%),
+    radial-gradient(circle at 100% 100%, rgba(129, 140, 248, 0.05) 0%, transparent 40%);
 }
 
 /* --- Layout Components --- */
@@ -72,6 +85,8 @@ body {
   flex-direction: column;
   padding: 2rem 1.5rem;
   z-index: 50;
+  overflow: hidden;
+  transition: background 0.3s ease, border 0.3s ease;
 }
 
 .main-content {
@@ -94,8 +109,12 @@ body {
 }
 
 .card:hover {
-  border-color: rgba(56, 189, 248, 0.3);
+  border-color: var(--primary);
   transform: translateY(-4px);
+  box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.15);
+}
+
+[data-theme='dark'] .card:hover {
   box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.45);
 }
 
@@ -103,7 +122,7 @@ body {
   font-size: 2.25rem;
   font-weight: 800;
   letter-spacing: -0.025em;
-  background: linear-gradient(135deg, #fff 0%, #cbd5e1 100%);
+  background: linear-gradient(135deg, var(--foreground) 0%, var(--muted) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -125,12 +144,13 @@ body {
 .nav-link:hover,
 .nav-link.active {
   color: var(--foreground);
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--surface-hover);
 }
 
 .nav-link.active {
-  background: linear-gradient(90deg, rgba(56, 189, 248, 0.1) 0%, transparent 100%);
+  background: linear-gradient(90deg, var(--primary-glow) 0%, transparent 100%);
   border-left: 3px solid var(--primary);
+  color: var(--primary);
 }
 
 /* --- Buttons & Inputs --- */
@@ -159,9 +179,9 @@ body {
 }
 
 .input-premium {
-  background: rgba(15, 23, 42, 0.4);
+  background: var(--surface);
   border: 1px solid var(--glass-border);
-  color: white;
+  color: var(--foreground);
   padding: 0.85rem 1rem;
   border-radius: var(--radius-md);
   outline: none;
@@ -171,7 +191,7 @@ body {
 
 .input-premium:focus {
   border-color: var(--primary);
-  background: rgba(15, 23, 42, 0.6);
+  background: var(--surface);
   box-shadow: 0 0 0 4px var(--primary-glow);
 }
 
@@ -191,4 +211,8 @@ body {
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--muted);
+}
+
+.sidebar-nav::-webkit-scrollbar {
+  display: none;
 }
