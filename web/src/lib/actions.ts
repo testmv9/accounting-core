@@ -34,7 +34,7 @@ export async function registerUserAction(formData: FormData) {
     redirect('/login?registered=true');
 }
 
-async function ensureAuth() {
+export async function ensureAuth() {
     const session = await auth();
     const tenantId = (session?.user as any)?.activeTenantId;
     if (!tenantId) throw new Error("Unauthorized: No active tenant found");

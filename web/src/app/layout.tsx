@@ -22,6 +22,7 @@ export const metadata: Metadata = {
 import { auth } from "@/auth";
 import Sidebar from "../components/Sidebar";
 import { getUnreconciledTransactionsAction } from "../lib/actions";
+import NIAIWrapper from "../components/ni/ai-wrapper";
 
 export default async function RootLayout({
   children,
@@ -60,12 +61,14 @@ export default async function RootLayout({
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         {tenantId ? (
-          <div className="app-container">
-            <Sidebar unreconciledCount={unreconciledCount} />
-            <main className="main-content">
-              {children}
-            </main>
-          </div>
+          <NIAIWrapper>
+            <div className="app-container">
+              <Sidebar unreconciledCount={unreconciledCount} />
+              <main className="main-content">
+                {children}
+              </main>
+            </div>
+          </NIAIWrapper>
         ) : (
           children
         )}
