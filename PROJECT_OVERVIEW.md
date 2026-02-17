@@ -56,7 +56,7 @@ Here is the "Engine Room" of what we built and why we chose these tools:
 
 ### 5. **NextAuth.js (The Security Guard)**
 *   **What it is**: An authentication library for Next.js.
-*   **Role**: It checks if your email/password matches `admin` before letting you see the Dashboard.
+*   **Role**: It checks if your email and password are correct before letting you see the Dashboard.
 *   **Why we used it**: Security is hard. NextAuth handles sessions, cookies, and redirects securely so we don't have to reinvent the wheel.
 
 ---

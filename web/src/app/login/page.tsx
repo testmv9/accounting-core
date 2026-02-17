@@ -105,7 +105,6 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
                             name="email"
                             type="email"
                             placeholder="name@company.com"
-                            defaultValue="admin@company.com"
                             className="input"
                             required
                             style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.1)', padding: '0.75rem 1rem' }}
@@ -118,7 +117,6 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
                             name="password"
                             type="password"
                             placeholder="••••••••"
-                            defaultValue="admin"
                             className="input"
                             required
                             style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.1)', padding: '0.75rem 1rem' }}
